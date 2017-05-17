@@ -9,8 +9,9 @@ repository = "https://github.com/abonander/multipart"
 license = "MIT OR Apache-2.0"
 
 [dependencies]
-hyper = "0.9"
-nickel = "0.9"
+hyper = "0.10"
+# nickel = "0.9"
+nickel = { git = "https://github.com/jolhoeft/nickel.rs.git", branch = "upgrade" }
 
 [dependencies.multipart]
 version = "0.12"
