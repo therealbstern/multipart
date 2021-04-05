@@ -84,13 +84,8 @@ impl<'a, 'b> HttpRequest for HyperRequest<'a, 'b> {
                 _ => return None,
             };
 
-            params.iter().find(|&&(ref name, _)|
-                match *name {
-                    Attr::Boundary => true,
-                    _ => false,
-                }
-            ).and_then(|&(_, ref val)|
-                match *val {
+            params.iter().find(|&&(ref name, _)| matches!(name, Attr::Boundary))
+                .and_then(|&(_, ref val)| match *val {
                     Value::Ext(ref val) => Some(&**val),
                     _ => None,
                 }
@@ -118,13 +113,8 @@ impl<'r, 'a, 'b> HttpRequest for &'r mut HyperRequest<'a, 'b> {
                 _ => return None,
             };
 
-            params.iter().find(|&&(ref name, _)|
-                match *name {
-                    Attr::Boundary => true,
-                    _ => false,
-                }
-            ).and_then(|&(_, ref val)|
-                match *val {
+            params.iter().find(|&&(ref name, _)| matches!(name, Attr::Boundary))
+                .and_then(|&(_, ref val)| match *val {
                     Value::Ext(ref val) => Some(&**val),
                     _ => None,
                 }

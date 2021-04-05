@@ -8,7 +8,7 @@
 //! `multipart` field header parsing.
 use mime::Mime;
 
-use std::error::Error;
+//use std::error::Error;
 use std::io::{self, BufRead, Read};
 use std::{fmt, str};
 
@@ -532,38 +532,38 @@ impl<M: ReadEntry, Entry> ReadEntryResult<M, Entry> {
     }
 }
 
-const GENERIC_PARSE_ERR: &str = "an error occurred while parsing field headers";
+//const GENERIC_PARSE_ERR: &str = "an error occurred while parsing field headers";
 
 quick_error! {
     #[derive(Debug)]
     enum ParseHeaderError {
         /// The `Content-Disposition` header was not found
         MissingContentDisposition(headers: String) {
-            display(x) -> ("{}:\n{}", x.description(), headers)
-            description("\"Content-Disposition\" header not found in field headers")
+            display(x) -> ("{}:\n{}", x.to_string(), headers)
+            //description("\"Content-Disposition\" header not found in field headers")
         }
         InvalidContDisp(reason: &'static str, cause: String) {
-            display(x) -> ("{}: {}: {}", x.description(), reason, cause)
-            description("invalid \"Content-Disposition\" header")
+            display(x) -> ("{}: {}: {}", x.to_string(), reason, cause)
+            //description("invalid \"Content-Disposition\" header")
         }
         /// The header was found but could not be parsed
         TokenizeError(err: HttparseError) {
-            description(GENERIC_PARSE_ERR)
-            display(x) -> ("{}: {}", x.description(), err)
+            //description(GENERIC_PARSE_ERR)
+            display(x) -> ("{}: {}", x.to_string(), err)
             cause(err)
             from()
         }
         MimeError(cont_type: String) {
-            description("Failed to parse Content-Type")
-            display(this) -> ("{}: {}", this.description(), cont_type)
+            //description("Failed to parse Content-Type")
+            display(this) -> ("{}: {}", this.to_string(), cont_type)
         }
         TooLarge {
-            description("field headers section ridiculously long or missing trailing CRLF-CRLF")
+            //description("field headers section ridiculously long or missing trailing CRLF-CRLF")
         }
         /// IO error
         Io(err: io::Error) {
-            description("an io error occurred while parsing the headers")
-            display(x) -> ("{}: {}", x.description(), err)
+            //description("an io error occurred while parsing the headers")
+            display(x) -> ("{}: {}", x.to_string(), err)
             cause(err)
             from()
         }

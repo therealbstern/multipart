@@ -41,8 +41,6 @@ pub struct LazyError<'a, E> {
     pub field_name: Option<Cow<'a, str>>,
     /// The inner error.
     pub error: E,
-    /// Private field for back-compat.
-    _priv: (),
 }
 
 impl<'a, E> LazyError<'a, E> {
@@ -50,7 +48,6 @@ impl<'a, E> LazyError<'a, E> {
         LazyError {
             field_name: None,
             error: error.into(),
-            _priv: (),
         }
     }
 
@@ -58,7 +55,6 @@ impl<'a, E> LazyError<'a, E> {
         LazyError {
             field_name: Some(field_name),
             error: error.into(),
-            _priv: (),
         }
     }
 
@@ -66,7 +62,6 @@ impl<'a, E> LazyError<'a, E> {
         LazyError {
             field_name: self.field_name,
             error: self.error.into(),
-            _priv: (),
         }
     }
 }
@@ -79,9 +74,9 @@ impl<'a> Into<io::Error> for LazyError<'a, io::Error> {
 }
 
 impl<'a, E: Error> Error for LazyError<'a, E> {
-    fn description(&self) -> &str {
-        self.error.description()
-    }
+    //fn description(&self) -> &str {
+    //    self.error.description()
+    //}
 
     fn cause(&self) -> Option<&dyn Error> {
         Some(&self.error)
@@ -298,7 +293,7 @@ impl<'d> PreparedFields<'d> {
                         &field.name,
                         &boundary,
                         &stream.content_type,
-                        stream.filename.as_ref().map(|f| &**f),
+                        stream.filename.as_deref(),
                         stream.stream,
                     ));
                 }
@@ -531,7 +526,7 @@ mod hyper {
     impl<'d> super::PreparedFields<'d> {
         /// #### Feature: `hyper`
         /// Convert `self` to `hyper::client::Body`.
-        #[cfg_attr(feature = "clippy", warn(wrong_self_convention))]
+        #[allow(clippy::wrong_self_convention)]
         pub fn to_body<'b>(&'b mut self) -> Body<'b>
         where
             'd: 'b,
